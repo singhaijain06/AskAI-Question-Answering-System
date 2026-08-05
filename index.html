@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app-shell">
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">🤖</div>
+            <div>
+                <h1>AI Assistant</h1>
+                <span>Powered by Ollama • {{ model }}</span>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+            <a class="nav-btn" href="/history">📜 History</a>
+            <a class="nav-btn danger" href="/logout">Logout</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <section class="welcome-card">
+            <div>
+                <p class="eyebrow">PERSONAL AI WORKSPACE</p>
+                <h2>Hello, {{ username }} 👋</h2>
+                <p>Ask questions, get instant AI answers, and keep your conversations organized.</p>
+            </div>
+            <a class="secondary-btn" href="/history">View History →</a>
+        </section>
+
+        <section class="chat-panel">
+
+            <div id="chatMessages" class="chat-messages">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">✨</div>
+                    <h3>What can I help you with?</h3>
+                    <p>Try asking about Python, C++, DBMS, aptitude, projects, or any topic.</p>
+
+                    <div class="suggestions">
+                        <button onclick="useSuggestion('Explain artificial intelligence in simple words')">Explain AI</button>
+                        <button onclick="useSuggestion('Give me 5 Python interview questions')">Python Interview</button>
+                        <button onclick="useSuggestion('Explain DBMS normalization with an example')">DBMS</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="composer-wrap">
+                <form id="chatForm" class="composer">
+                    <textarea
+                        id="question"
+                        placeholder="Message your AI assistant..."
+                        rows="1"
+                        autocomplete="off"
+                    ></textarea>
+
+                    <button id="sendBtn" type="submit" class="send-btn">
+                        <span id="sendText">Send</span>
+                        <span id="sendSpinner" class="spinner hidden"></span>
+                    </button>
+                </form>
+
+                <div class="composer-footer">
+                    <span>Press Enter to send • Shift + Enter for new line</span>
+                    <span>Local AI • Your chats stay in your database</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

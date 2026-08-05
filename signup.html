@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup • AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-body">
+
+<div class="auth-card">
+    <div class="auth-logo">✨</div>
+    <p class="eyebrow">AI QUESTION ANSWERING SYSTEM</p>
+    <h1>Create account</h1>
+    <p class="auth-subtitle">Create your personal AI workspace.</p>
+
+    {% if error %}
+        <div class="error-box">❌ {{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="auth-form">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Your name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Minimum 6 characters" minlength="6" required>
+
+        <button type="submit" class="primary-btn full">Create Account</button>
+    </form>
+
+    <p class="auth-link">Already have an account? <a href="/login">Login</a></p>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
