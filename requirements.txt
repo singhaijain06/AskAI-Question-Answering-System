@@ -1,4 +1,5 @@
 Flask
+Flask
 Werkzeug
 markdown
 ollama
@@ -6,3 +7,4 @@ PyPDF2
 pytesseract
 pdf2image
 gunicorn
+reportlab
