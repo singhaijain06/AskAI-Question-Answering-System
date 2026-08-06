@@ -4,5 +4,7 @@ Werkzeug
 markdown
 reportlab
 PyPDF2
-gunicorn
 pytesseract
+pdf2image
+Pillow
+gunicorn
