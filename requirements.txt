@@ -5,3 +5,4 @@ markdown
 reportlab
 PyPDF2
 gunicorn
+pytesseract
