@@ -1,94 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat History</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AskAI - History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* ================= HISTORY SEARCH ================= */
+
+        .history-search {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .history-search input {
+            flex: 1;
+            padding: 13px 16px;
+            border: 1px solid #dfe3f0;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            background: #ffffff;
+            color: #172033;
+        }
+
+        .history-search input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.10);
+        }
+
+        .history-search button {
+            border: none;
+            padding: 13px 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .history-search button:hover {
+            transform: translateY(-1px);
+        }
+
+        .clear-search {
+            padding: 13px 16px;
+            border-radius: 12px;
+            background: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+        }
+
+        /* ================= DELETE BUTTON ================= */
+
+        .history-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .delete-history-button {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 9px;
+            background: #fff1f2;
+            color: #dc2626;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-history-button:hover {
+            background: #ffe4e6;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 650px) {
+
+            .history-search {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .history-search button,
+            .clear-search {
+                text-align: center;
+            }
+
+        }
+    </style>
+
 </head>
+
+
 <body>
 
-<div class="app-shell">
 
-    <header class="topbar">
+<div class="app-container">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
         <div class="brand">
-            <div class="brand-icon">📜</div>
-            <div>
-                <h1>Chat History</h1>
-                <span>Welcome, {{ username }}</span>
+
+            <div class="brand-icon">
+                🤖
             </div>
+
+            <div>
+
+                <h1>AskAI</h1>
+
+                <span>
+                    AI Assistant
+                </span>
+
+            </div>
+
         </div>
 
-        <div class="top-actions">
-            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
-            <a class="nav-btn" href="/chat">← New Chat</a>
-            <a class="nav-btn danger" href="/logout">Logout</a>
+
+        <a href="/chat"
+           class="new-chat">
+
+            ＋ New Chat
+
+        </a>
+
+
+        <nav class="navigation">
+
+
+            <a href="/dashboard"
+               class="nav-item">
+
+                📊 Dashboard
+
+            </a>
+
+
+            <a href="/chat"
+               class="nav-item">
+
+                💬 Chat
+
+            </a>
+
+
+            <a href="/history"
+               class="nav-item active">
+
+                📜 History
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+
+            <div class="user-profile">
+
+
+                <div class="avatar">
+
+                    {{ username[0]|upper }}
+
+                </div>
+
+
+                <div class="user-info">
+
+                    <strong>
+                        {{ username }}
+                    </strong>
+
+                    <small>
+                        Active User
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+            <a href="/logout"
+               class="logout">
+
+                🚪 Logout
+
+            </a>
+
+
         </div>
-    </header>
+
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
 
     <main class="main-content">
 
-        <section class="history-toolbar">
+
+        <!-- ================= HEADER ================= -->
+
+        <header class="top-header">
+
+
             <div>
-                <p class="eyebrow">YOUR CONVERSATIONS</p>
-                <h2>Saved Questions</h2>
+
+                <h2>
+                    Chat History
+                </h2>
+
+                <p>
+                    Your previous conversations.
+                </p>
+
             </div>
 
-            <div class="history-actions">
-                <input id="historySearch" type="text" placeholder="Search history..." oninput="filterHistory()">
-                <a class="secondary-btn" href="/export-pdf">⬇ Export PDF</a>
 
-                <form method="POST" action="/clear-history"
-                      onsubmit="return confirm('Delete all your chat history?')">
-                    <button class="danger-btn" type="submit">🗑 Clear All</button>
-                </form>
+        </header>
+
+
+        <!-- ================= HISTORY PAGE ================= -->
+
+        <section class="history-page">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- ================= TOOLBAR ================= -->
+
+            <div class="history-toolbar">
+
+
+                <div>
+
+                    <h1>
+                        📜 Conversations
+                    </h1>
+
+                    <p>
+                        Review your previous AI questions and answers.
+                    </p>
+
+                </div>
+
+
+                {% if history %}
+
+                    <a
+                        href="/clear_history"
+                        class="clear-button"
+                        onclick="return confirm('Clear all chat history?');">
+
+                        🗑️ Clear History
+
+                    </a>
+
+                {% endif %}
+
+
             </div>
-        </section>
 
-        <section id="historyList" class="history-list">
 
-            {% if chats %}
+            <!-- ================= SEARCH ================= -->
 
-                {% for chat in chats %}
-                <article class="history-card">
-                    <div class="history-meta">
-                        <span>💬 Conversation #{{ chat['id'] }}</span>
-                        <span>{{ chat['created_at'] or 'Date unavailable' }}</span>
-                    </div>
+            <form
+                method="GET"
+                action="/history"
+                class="history-search">
 
-                    <h3 class="history-question">{{ chat['question'] }}</h3>
 
-                    <div class="history-answer">
-                        {{ chat['answer'] }}
-                    </div>
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search or '' }}"
+                    placeholder="🔍 Search your questions or answers...">
 
-                    <div class="history-footer">
-                        <a class="small-btn" href="/chat">Ask New Question</a>
 
-                        <form method="POST" action="/delete/{{ chat['id'] }}"
-                              onsubmit="return confirm('Delete this conversation?')">
-                            <button class="delete-btn" type="submit">Delete</button>
-                        </form>
-                    </div>
-                </article>
-                {% endfor %}
+                <button type="submit">
+
+                    Search
+
+                </button>
+
+
+                {% if search %}
+
+                    <a
+                        href="/history"
+                        class="clear-search">
+
+                        ✕ Clear
+
+                    </a>
+
+                {% endif %}
+
+
+            </form>
+
+
+            <!-- ================= HISTORY ================= -->
+
+            {% if history %}
+
+
+                <div class="history-list">
+
+
+                    {% for item in history %}
+
+
+                        <div class="history-card">
+
+
+                            <!-- QUESTION -->
+
+                            <div class="history-question">
+
+
+                                <div class="history-avatar">
+                                    👤
+                                </div>
+
+
+                                <div>
+
+                                    <small>
+                                        You
+                                    </small>
+
+
+                                    <h3>
+                                        {{ item.question }}
+                                    </h3>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- ANSWER -->
+
+                            <div class="history-answer">
+
+
+                                <div class="history-avatar">
+                                    🤖
+                                </div>
+
+
+                                <div>
+
+                                    <small>
+                                        AI Assistant
+                                    </small>
+
+
+                                    <div>
+                                        {{ item.answer|safe }}
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- DATE -->
+
+                            <div class="history-date">
+
+                                🕒 {{ item.created_at }}
+
+                            </div>
+
+
+                            <!-- DELETE -->
+
+                            <div class="history-actions">
+
+                                <form
+                                    method="POST"
+                                    action="/delete_history/{{ item.id }}"
+                                    onsubmit="return confirm('Delete this conversation?');">
+
+
+                                    <button
+                                        type="submit"
+                                        class="delete-history-button">
+
+                                        🗑️ Delete
+
+                                    </button>
+
+
+                                </form>
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
 
             {% else %}
 
+
+                <!-- ================= EMPTY ================= -->
+
                 <div class="empty-history">
-                    <div class="empty-icon">📭</div>
-                    <h3>No conversations yet</h3>
-                    <p>Ask your first question and it will appear here.</p>
-                    <a class="primary-btn" href="/chat">Start Chatting</a>
+
+
+                    <div>
+                        📜
+                    </div>
+
+
+                    {% if search %}
+
+                        <h2>
+                            No results found
+                        </h2>
+
+
+                        <p>
+                            No conversations matched "{{ search }}".
+                        </p>
+
+
+                        <a
+                            href="/history"
+                            class="action-button">
+
+                            🔄 Show All History
+
+                        </a>
+
+
+                    {% else %}
+
+                        <h2>
+                            No chat history
+                        </h2>
+
+
+                        <p>
+                            Your conversations will appear here.
+                        </p>
+
+
+                        <a
+                            href="/chat"
+                            class="action-button">
+
+                            💬 Start Chat
+
+                        </a>
+
+                    {% endif %}
+
+
                 </div>
+
 
             {% endif %}
 
+
         </section>
 
+
     </main>
+
+
 </div>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
+
 </html>

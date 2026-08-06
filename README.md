@@ -1,75 +1,87 @@
-# 🤖 AskAI – Question Answering System
+# AI-Based Question Answering System
 
-AskAI is an AI-powered Question Answering System developed using **Python, Flask, SQLite and Ollama (Llama 3.2)**.
+## Project Overview
 
-The system allows users to create an account, log in securely, ask questions and receive AI-generated answers through a simple and professional web interface.
+AI-Based Question Answering System is a web-based application developed using Flask and Llama 3.2 through Ollama.
 
----
+The system allows users to ask questions and receive AI-generated answers. Users can also upload PDF documents and ask questions based on the content of those documents.
 
-## ✨ Features
-
-- 🔐 User Signup and Login
-- 🔑 Secure Password Hashing
-- 🤖 AI-powered Question Answering
-- 🧠 Ollama + Llama 3.2 Integration
-- 💬 Interactive Chat Interface
-- 📜 Chat History
-- 🗄️ SQLite Database
-- 📄 PDF Upload Support
-- 🚪 Logout Functionality
-- 🎨 Professional Web Interface
-- 📱 User-friendly Dashboard
+The system supports both text-based PDFs and scanned/image-based PDFs using OCR.
 
 ---
 
-## 🛠️ Technologies Used
+## Features
+
+- User Registration
+- User Login
+- Secure Password Hashing
+- AI Question Answering
+- Llama 3.2 Integration
+- Ollama Integration
+- PDF Upload
+- PDF Text Extraction
+- OCR for Scanned PDFs
+- PDF-Based Question Answering
+- PDF Management
+- Remove PDF
+- Chat History
+- Dashboard
+- Copy Answer
+- Loading Animation
+- Flash Messages
+- Logout
+- Responsive User Interface
+
+---
+
+## Technologies Used
 
 ### Frontend
-- HTML5
-- CSS3
+
+- HTML
+- CSS
 - JavaScript
 
 ### Backend
+
 - Python
 - Flask
 
-### Database
-- SQLite
-
 ### AI
+
 - Ollama
 - Llama 3.2
 
-### Other Libraries
-- Markdown
-- Werkzeug
+### Database
+
+- SQLite
+
+### PDF Processing
+
+- PyPDF2
+- pdf2image
+- Pillow
+- pytesseract
 
 ---
 
-## 📁 Project Structure
+## System Requirements
 
-```text
-AskAI-Question-Answering-System/
-│
-├── app.py
-├── requirements.txt
-│
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── signup.html
-│   └── history.html
-│
-├── static/
-│   ├── style.css
-│   └── script.js
-│
-└── uploads/
+- Windows/Linux/macOS
+- Python 3.x
+- PyCharm
+- Ollama
+- Llama 3.2 model
+
 ---
 
-## ⚙️ Installation
+## Installation
 
-### 1. Clone the Repository
+### 1. Clone or download the project
+
+Open the project in PyCharm.
+
+### 2. Create virtual environment
 
 ```bash
-git clone https://github.com/singhaijain06/AskAI-Question-Answering-System.git
+python -m venv .venv

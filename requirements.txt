@@ -1,5 +1,8 @@
 Flask
-ollama
 Werkzeug
 markdown
-reportlab
+ollama
+PyPDF2
+pytesseract
+pdf2image
+gunicorn

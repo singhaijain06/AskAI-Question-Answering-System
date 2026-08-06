@@ -7,20 +7,32 @@ __pycache__/
 .venv/
 venv/
 env/
+ENV/
 
-# Environment variables
-.env
+# PyCharm
+.idea/
+*.iml
 
-# SQLite database
+# Flask
+instance/
+*.log
+
+# Database
+database.db
 *.db
 
-# Uploaded files
+# Uploaded PDFs and extracted files
 uploads/*
+!uploads/.gitkeep
 
-# IDE
-.idea/
-.vscode/
+# Environment / secrets
+.env
+.env.*
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
