@@ -1,10 +1,7 @@
 Flask
-ollama
+groq
 Werkzeug
 markdown
 reportlab
 PyPDF2
-pytesseract
-pdf2image
-Pillow
 gunicorn
