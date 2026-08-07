@@ -19,7 +19,8 @@ from werkzeug.security import (
 from werkzeug.utils import secure_filename
 
 import markdown
-import ollama
+
+from groq import Groq
 
 from PyPDF2 import PdfReader
 
@@ -33,7 +34,15 @@ from pdf2image import convert_from_path
 
 app = Flask(__name__)
 
-app.secret_key = "askai_super_secret_key_change_this"
+app.secret_key = os.environ.get(
+    "SECRET_KEY",
+    "askai_super_secret_key_change_this"
+)
+
+
+# =========================================================
+# PDF CONFIGURATION
+# =========================================================
 
 UPLOAD_FOLDER = "uploads"
 
@@ -45,6 +54,22 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 20 * 1024 * 1024
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
+# =========================================================
+# GROQ AI CONFIGURATION
+# =========================================================
+
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+
+if not GROQ_API_KEY:
+    print("WARNING: GROQ_API_KEY is not set.")
+
+client = Groq(
+    api_key=GROQ_API_KEY
+)
+
+MODEL_NAME = "llama-3.3-70b-versatile"
 
 
 # =========================================================
@@ -370,7 +395,6 @@ def find_relevant_text(
 
     return " ".join(selected)
 
-
 # =========================================================
 # NORMAL AI
 # =========================================================
@@ -379,26 +403,24 @@ def ask_ai(question):
 
     try:
 
-        response = ollama.chat(
-
-            model="llama3.2:1b",
-
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
             messages=[
                 {
                     "role": "user",
                     "content": question
                 }
-            ]
-
+            ],
+            temperature=0.7
         )
 
-        answer = response["message"]["content"]
+        answer = response.choices[0].message.content
 
         return answer
 
     except Exception as e:
 
-        print("OLLAMA ERROR:", e)
+        print("GROQ AI ERROR:", e)
 
         return (
             "AI Error: "
@@ -442,26 +464,24 @@ ANSWER:
 
     try:
 
-        response = ollama.chat(
-
-            model="llama3.2:1b",
-
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
             messages=[
                 {
                     "role": "user",
                     "content": prompt
                 }
-            ]
-
+            ],
+            temperature=0.2
         )
 
-        answer = response["message"]["content"]
+        answer = response.choices[0].message.content
 
         return answer
 
     except Exception as e:
 
-        print("PDF AI ERROR:", e)
+        print("PDF GROQ ERROR:", e)
 
         return (
             "AI Error: "
