@@ -20,6 +20,7 @@ from werkzeug.utils import secure_filename
 
 import markdown
 import ollama
+from groq import Groq
 
 from PyPDF2 import PdfReader
 
@@ -379,6 +380,41 @@ def ask_ai(question):
 
     try:
 
+        # -------------------------------------------------
+        # RENDER / GROQ
+        # -------------------------------------------------
+
+        groq_api_key = os.environ.get("GROQ_API_KEY")
+
+        if groq_api_key:
+
+            client = Groq(
+                api_key=groq_api_key
+            )
+
+            response = client.chat.completions.create(
+
+                model="llama-3.1-8b-instant",
+
+                messages=[
+                    {
+                        "role": "user",
+                        "content": question
+                    }
+                ],
+
+                temperature=0.7
+            )
+
+            answer = response.choices[0].message.content
+
+            return answer
+
+
+        # -------------------------------------------------
+        # LOCAL / OLLAMA
+        # -------------------------------------------------
+
         response = ollama.chat(
 
             model="llama3.2:1b",
@@ -396,15 +432,15 @@ def ask_ai(question):
 
         return answer
 
+
     except Exception as e:
 
-        print("OLLAMA ERROR:", e)
+        print("AI ERROR:", e)
 
         return (
             "AI Error: "
             + str(e)
         )
-
 
 # =========================================================
 # PDF AI
