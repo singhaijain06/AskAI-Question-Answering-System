@@ -1,5 +1,5 @@
 const CACHE_NAME = "askai-v1";
-
+ 
 self.addEventListener("install", function () {
 
     console.log("AskAI Service Worker installed");
