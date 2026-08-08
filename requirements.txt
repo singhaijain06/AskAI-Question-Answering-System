@@ -1,0 +1,11 @@
+Flask
+groq
+Werkzeug
+markdown
+reportlab
+PyPDF2
+<<<<<<< HEAD
+gunicorn
+=======
+gunicorn
+>>>>>>> be7437c (Updated AskAI features)
