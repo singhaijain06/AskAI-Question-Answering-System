@@ -1,11 +1,9 @@
 Flask
-groq
-Werkzeug
 markdown
-reportlab
+groq
+gunicorn
 PyPDF2
-<<<<<<< HEAD
-gunicorn
-=======
-gunicorn
->>>>>>> be7437c (Updated AskAI features)
+pdf2image
+pytesseract
+Pillow
+Werkzeug
