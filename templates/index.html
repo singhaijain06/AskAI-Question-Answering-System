@@ -1,0 +1,1771 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> be7437c (Updated AskAI features)
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AskAI - AI Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link rel="manifest"
+      href="{{ url_for('static', filename='manifest.json') }}">
+
+<meta name="theme-color"
+      content="#6366f1">
+    <style>
+
+        /* =====================================================
+           ASKAI CHAT PAGE
+        ===================================================== */
+
+        body {
+            background: linear-gradient(
+                135deg,
+                #eef2ff 0%,
+                #e0e7ff 45%,
+                #dbeafe 100%
+            );
+        }
+
+        .main-content {
+            margin-left: 270px;
+            min-height: 100vh;
+            padding: 25px 35px;
+            width: calc(100% - 270px);
+        }
+
+        .chat-area {
+            width: 100%;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        /* ================= HEADER ================= */
+
+        .top-header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 18px;
+            padding: 20px 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 25px rgba(37, 55, 100, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-header h2 {
+            margin: 0;
+            color: #172554;
+            font-size: 24px;
+        }
+
+        .top-header p {
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #16a34a;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .online-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 8px rgba(34, 197, 94, 0.7);
+        }
+
+        /* ================= FLASH ================= */
+
+        .flash-container {
+            margin-bottom: 18px;
+        }
+
+        .flash-message {
+            padding: 13px 17px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flash-message.success {
+            background: #ecfdf5;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .flash-message.error {
+            background: #fff1f2;
+            color: #dc2626;
+            border: 1px solid #fecdd3;
+        }
+
+        /* ================= WELCOME ================= */
+
+        .welcome {
+            text-align: center;
+            background: rgba(255,255,255,0.96);
+            border-radius: 22px;
+            padding: 38px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(37,55,100,0.08);
+        }
+
+        .welcome-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 15px;
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 38px;
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+            box-shadow: 0 10px 25px rgba(99,102,241,0.25);
+        }
+
+        .welcome h1 {
+            color: #172554;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        /* ================= PDF ================= */
+
+        .pdf-upload {
+            background: rgba(255,255,255,0.96);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(37,55,100,0.07);
+        }
+
+        .pdf-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .pdf-header h3 {
+            color: #172554;
+            margin: 0;
+        }
+
+        .pdf-header span {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .pdf-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-form input[type="file"] {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px;
+            border: 1px solid #dbe2f0;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .upload-button {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .pdf-active {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 13px 15px;
+            border-radius: 12px;
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+        }
+
+        .pdf-active-info {
+            color: #3730a3;
+            font-size: 14px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .remove-pdf {
+            border: none;
+            background: #fff1f2;
+            color: #dc2626;
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* ================= CONVERSATION ================= */
+
+        .conversation {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 13px;
+            margin-bottom: 18px;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+            color: white;
+            font-size: 19px;
+            box-shadow: 0 5px 15px rgba(99,102,241,0.2);
+        }
+
+        .message.user .message-avatar {
+            background: #2563eb;
+        }
+
+        .message-content {
+            max-width: 78%;
+            padding: 15px 18px;
+            border-radius: 17px;
+            background: white;
+            color: #172033;
+            box-shadow: 0 6px 20px rgba(37,55,100,0.08);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #4f46e5
+            );
+            color: white;
+            border-top-right-radius: 5px;
+        }
+
+        .message.ai .message-content {
+            border-top-left-radius: 5px;
+        }
+
+        .message-content p {
+            margin-bottom: 8px;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            padding-left: 22px;
+            margin: 8px 0;
+        }
+
+        .message-content code {
+            background: #f1f5f9;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+```css
+/* =====================================================
+   AI ANSWER WIDTH FIX
+===================================================== */
+
+.conversation {
+    width: 100% !important;
+    display: block !important;
+}
+
+.message.ai {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    align-items: flex-start !important;
+    box-sizing: border-box !important;
+    gap: 13px !important;
+}
+
+.message.ai .message-avatar {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+}
+
+.message.ai .message-content {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: calc(100% - 55px) !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+}
+
+/* AI answer text */
+.message.ai .answer-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+}
+
+/* Answer ke andar generated HTML */
+.message.ai .answer-content p,
+.message.ai .answer-content div,
+.message.ai .answer-content span,
+.message.ai .answer-content li {
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+}
+
+.message.ai .answer-content ul,
+.message.ai .answer-content ol {
+    display: block !important;
+    width: 100% !important;
+}
+
+.message.ai .answer-content table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+}
+
+.message.ai .answer-content pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-x: auto !important;
+}
+
+.message.ai .answer-content code {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+}
+```
+
+
+        /* ================= INPUT ================= */
+
+        .input-area {
+            position: sticky;
+            bottom: 15px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 20px;
+            padding: 14px;
+            box-shadow: 0 10px 30px rgba(37,55,100,0.12);
+            border: 1px solid #e2e8f0;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .chat-form textarea {
+            flex: 1;
+            min-height: 52px;
+            max-height: 150px;
+            resize: none;
+            border: 1px solid #dbe2f0;
+            border-radius: 14px;
+            padding: 15px;
+            outline: none;
+            font-size: 15px;
+            color: #172033;
+            background: #f8fafc;
+        }
+
+        .chat-form textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.10);
+            background: white;
+        }
+
+        .send-button {
+            min-width: 105px;
+            height: 52px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .send-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .send-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-hint {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading-message {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 14px 17px;
+            border-radius: 15px;
+            margin-bottom: 18px;
+            width: fit-content;
+            box-shadow: 0 6px 20px rgba(37,55,100,0.08);
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #6366f1;
+            animation: typing 1.2s infinite;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+
+        /* ================= DISCLAIMER ================= */
+
+        .disclaimer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+            margin: 12px 0 5px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 20px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+                height: auto;
+            }
+
+            .app-container {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 20px;
+            }
+
+            .top-header {
+                padding: 17px;
+            }
+
+            .online-status {
+                display: none;
+            }
+
+            .message-content {
+                max-width: 88%;
+            }
+
+            .chat-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .send-button {
+                width: 100%;
+            }
+
+            .pdf-active {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+
+<div class="app-container">
+
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h1>AskAI</h1>
+
+                <span>
+                    AI Assistant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a href="/chat"
+           class="new-chat">
+
+            ＋ New Chat
+
+        </a>
+
+
+        <nav class="navigation">
+
+
+            <a href="/dashboard"
+               class="nav-item">
+
+                📊 Dashboard
+
+            </a>
+
+
+            <a href="/chat"
+               class="nav-item active">
+
+                💬 Chat
+
+            </a>
+
+
+            <a href="/history"
+               class="nav-item">
+
+                📜 History
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+
+            <div class="user-profile">
+
+
+                <div class="avatar">
+
+                    {{ username[0]|upper }}
+
+                </div>
+
+
+                <div class="user-info">
+
+                    <strong>
+                        {{ username }}
+                    </strong>
+
+                    <small>
+                        Active User
+                    </small>
+
+                </div>
+
+
+            </div>
+
+
+            <a href="/logout"
+               class="logout">
+
+                🚪 Logout
+
+            </a>
+
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <header class="top-header">
+
+
+            <div>
+
+                <h2>
+                    AI Assistant
+                </h2>
+
+                <p>
+                    Ask questions, upload PDFs and get intelligent answers.
+                </p>
+
+            </div>
+
+
+            <div class="online-status">
+
+                <span class="online-dot"></span>
+
+                Online
+
+            </div>
+
+
+        </header>
+
+
+        <div class="chat-area">
+
+
+            <!-- =================================================
+                 FLASH MESSAGES
+            ================================================== -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                {% if messages %}
+
+                    <div class="flash-container">
+
+                        {% for category, message in messages %}
+
+                            <div class="flash-message {{ category }}">
+
+                                {{ message }}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- =================================================
+                 WELCOME
+            ================================================== -->
+
+            {% if not answer %}
+
+                <div class="welcome">
+
+                    <div class="welcome-icon">
+                        🤖
+                    </div>
+
+                    <h1>
+                        Hello, {{ username }}! 👋
+                    </h1>
+
+                    <p>
+                        Ask me anything or upload a PDF to ask questions from it.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 PDF SECTION
+            ================================================== -->
+
+            <div class="pdf-upload">
+
+
+                {% if session.get("pdf_name") %}
+
+
+                    <div class="pdf-header">
+
+                        <div>
+
+                            <h3>
+                                📄 Uploaded PDF
+                            </h3>
+
+                            <span>
+                                Ask questions about this document.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="pdf-active">
+
+
+                        <div class="pdf-active-info">
+
+                            📎 {{ session.get("pdf_name") }}
+
+                        </div>
+
+
+                        <form
+                            action="/remove_pdf"
+                            method="POST"
+                            onsubmit="return confirm('Remove this PDF?');">
+
+                            <button
+                                type="submit"
+                                class="remove-pdf">
+
+                                🗑️ Remove PDF
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <div class="pdf-header">
+
+                        <div>
+
+                            <h3>
+                                📄 Ask Questions from PDF
+                            </h3>
+
+                            <span>
+                                Upload a PDF and ask questions about its content.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <form
+                        action="/upload_pdf"
+                        method="POST"
+                        enctype="multipart/form-data"
+                        class="pdf-form">
+
+
+                        <input
+                            type="file"
+                            name="pdf"
+                            accept=".pdf,application/pdf"
+                            required>
+
+
+                        <button
+                            type="submit"
+                            class="upload-button">
+
+                            📤 Upload PDF
+
+                        </button>
+
+
+
+
+                    </form>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- =================================================
+                 CONVERSATION
+            ================================================== -->
+
+            {% if question and answer %}
+
+                <div class="conversation">
+
+
+                    <!-- USER MESSAGE -->
+
+                    <div class="message user">
+
+
+                        <div class="message-avatar">
+                            👤
+                        </div>
+
+
+                        <div class="message-content">
+
+                            {{ question }}
+
+                        </div>
+
+
+                    </div>
+
+
+ ```html
+<!-- AI MESSAGE -->
+
+<div class="message ai">
+
+    <div class="message-avatar">
+        🤖
+    </div>
+
+    <div class="message-content answer-content">
+
+        {{ answer|safe }}
+
+        <div class="answer-actions">
+
+            <button
+                type="button"
+                class="copy-answer-btn"
+                onclick="copyAnswer(this)">
+                📋 Copy Answer
+            </button>
+
+        </div>
+
+        <div class="answer-feedback">
+
+            <span>Was this answer helpful?</span>
+
+            <button
+                type="button"
+                class="feedback-btn"
+                onclick="answerFeedback(this, 'yes')">
+                👍 Yes
+            </button>
+
+            <button
+                type="button"
+                class="feedback-btn"
+                onclick="answerFeedback(this, 'no')">
+                👎 No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 LOADING
+            ================================================== -->
+
+            <div
+                class="loading-message"
+                id="loadingMessage">
+
+
+                <div class="message-avatar">
+                    🤖
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        AskAI is thinking
+                    </strong>
+
+
+                    <div class="loading-dots">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <!-- =================================================
+     INPUT
+================================================= -->
+
+<div class="input-area">
+
+    <form
+        action="/chat"
+        method="POST"
+        class="chat-form"
+        id="chatForm">
+
+        <textarea
+            name="question"
+            id="questionInput"
+            placeholder="Ask AskAI anything..."
+            autocomplete="off"
+            required>{{ question or '' }}</textarea>
+
+
+        <!-- VOICE BUTTON -->
+        <button
+            type="button"
+            id="voice-btn"
+            class="voice-button"
+            title="Speak your question">
+
+            🎤
+
+        </button>
+
+
+        <!-- SEND BUTTON -->
+        <button
+            type="submit"
+            class="send-button">
+
+            🚀 Send
+
+        </button>
+        <button type="button"
+        class="edit-question-btn"
+        onclick="editQuestion(this)">
+    ✏️ Edit
+</button>
+
+    </form>
+
+
+    <div class="input-hint">
+
+        Press Enter to send • Shift + Enter for new line
+
+    </div>
+
+</div>
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    const chatForm =
+        document.getElementById("chatForm");
+
+    const questionInput =
+        document.getElementById("questionInput");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const loadingMessage =
+        document.getElementById("loadingMessage");
+    const questionBox = document.getElementById("questionInput");
+
+
+    /* =========================================
+       ENTER TO SEND
+    ========================================= */
+
+    questionInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+                &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                chatForm.requestSubmit();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       AUTO RESIZE TEXTAREA
+    ========================================= */
+
+    questionInput.addEventListener(
+        "input",
+        function() {
+
+            this.style.height = "auto";
+
+            this.style.height =
+                Math.min(
+                    this.scrollHeight,
+                    150
+                ) + "px";
+
+        }
+    );
+
+
+    /* =========================================
+       LOADING INDICATOR
+    ========================================= */
+
+    chatForm.addEventListener(
+        "submit",
+        function() {
+
+            const question =
+                questionInput.value.trim();
+
+
+            if (!question) {
+
+                return;
+
+            }
+
+
+            sendButton.disabled = true;
+
+            sendButton.innerHTML =
+                "⏳ Thinking...";
+
+
+            loadingMessage.style.display =
+                "flex";
+
+        }
+    );
+
+
+    /* =========================================
+       FOCUS INPUT
+    ========================================= */
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            questionInput.focus();
+
+        }
+    );
+
+</script>
+
+<script src="{{ url_for('static', filename='askai_features.js') }}"></script>
+
+<script src="{{ url_for('static', filename='theme.js') }}"></script>
+
+<script src="{{ url_for('static', filename='chat-enhance.js') }}"></script>
+
+<script src="{{ url_for('static', filename='voice.js') }}"></script>
+            <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const voiceBtn = document.getElementById("voice-btn");
+    const questionBox = document.getElementById("question");
+
+    if (!voiceBtn || !questionBox) {
+        console.log("Voice button or question box not found.");
+        return;
+    }
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        voiceBtn.addEventListener("click", function () {
+            alert(
+                "Voice input is not supported. Please use Google Chrome."
+            );
+        });
+
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+
+    // =========================
+    // VOICE BUTTON CLICK
+    // =========================
+
+    voiceBtn.addEventListener("click", function () {
+
+        try {
+
+            recognition.start();
+
+            voiceBtn.innerHTML = "🔴";
+            voiceBtn.classList.add("recording");
+
+            console.log("Voice recording started.");
+
+        } catch (error) {
+
+            console.log(
+                "Recognition start error:",
+                error
+            );
+
+        }
+
+    });
+
+
+    // =========================
+    // VOICE RESULT
+    // =========================
+
+    recognition.addEventListener(
+        "result",
+        function (event) {
+
+            const transcript =
+                event.results[0][0].transcript;
+
+            questionBox.value = transcript;
+
+            voiceBtn.innerHTML = "🎤";
+            voiceBtn.classList.remove("recording");
+
+            console.log(
+                "Voice:",
+                transcript
+            );
+
+        }
+    );
+
+
+    // =========================
+    // VOICE END
+    // =========================
+
+    recognition.addEventListener(
+        "end",
+        function () {
+
+            voiceBtn.innerHTML = "🎤";
+
+            voiceBtn.classList.remove(
+                "recording"
+            );
+
+        }
+    );
+
+
+    // =========================
+    // VOICE ERROR
+    // =========================
+
+    recognition.addEventListener(
+        "error",
+        function (event) {
+
+            console.log(
+                "Voice error:",
+                event.error
+            );
+
+            voiceBtn.innerHTML = "🎤";
+
+            voiceBtn.classList.remove(
+                "recording"
+            );
+
+            if (event.error === "not-allowed") {
+
+                alert(
+                    "Microphone permission Allow karo."
+                );
+
+            } else if (
+                event.error === "no-speech"
+            ) {
+
+                alert(
+                    "Kuch bola nahi gaya. Dobara try karo."
+                );
+
+            } else {
+
+                alert(
+                    "Voice input start nahi ho paya."
+                );
+
+            }
+
+        }
+    );
+
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const voiceBtn = document.getElementById("voice-btn");
+    const questionInput = document.getElementById("questionInput");
+
+    if (!voiceBtn || !questionInput) {
+        console.log("Voice button or question input not found.");
+        return;
+    }
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "Voice-to-text is not supported in this browser. Please use Google Chrome."
+        );
+
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+
+    // ==============================
+    // START VOICE
+    // ==============================
+
+    voiceBtn.addEventListener("click", function () {
+
+        try {
+
+            recognition.start();
+
+            voiceBtn.innerHTML = "🔴";
+
+            console.log("Voice started");
+
+        } catch (error) {
+
+            console.log(
+                "Voice start error:",
+                error
+            );
+
+        }
+
+    });
+
+
+    // ==============================
+    // VOICE RESULT
+    // ==============================
+
+    recognition.addEventListener(
+        "result",
+        function (event) {
+
+            console.log("Voice result received");
+
+            let transcript = "";
+
+            for (
+                let i = event.resultIndex;
+                i < event.results.length;
+                i++
+            ) {
+
+                transcript +=
+                    event.results[i][0].transcript;
+
+            }
+
+            transcript = transcript.trim();
+
+            console.log(
+                "Transcript:",
+                transcript
+            );
+
+
+            if (transcript !== "") {
+
+                questionInput.value = transcript;
+
+                // Trigger input event
+                questionInput.dispatchEvent(
+                    new Event("input", {
+                        bubbles: true
+                    })
+                );
+
+            }
+
+            voiceBtn.innerHTML = "🎤";
+
+        }
+    );
+
+
+    // ==============================
+    // VOICE END
+    // ==============================
+
+    recognition.addEventListener(
+        "end",
+        function () {
+
+            voiceBtn.innerHTML = "🎤";
+
+        }
+    );
+
+
+    // ==============================
+    // VOICE ERROR
+    // ==============================
+
+    recognition.addEventListener(
+        "error",
+        function (event) {
+
+            console.log(
+                "Voice Error:",
+                event.error
+            );
+
+            voiceBtn.innerHTML = "🎤";
+
+
+            if (event.error === "not-allowed") {
+
+                alert(
+                    "Microphone permission Allow karo."
+                );
+
+            }
+
+            else if (event.error === "no-speech") {
+
+                alert(
+                    "Kuch suna nahi gaya. Dobara bolkar try karo."
+                );
+
+            }
+
+            else if (event.error === "network") {
+
+                alert(
+                    "Voice service ke liye internet connection check karo."
+                );
+
+            }
+
+        }
+    );
+
+});
+
+
+
+
+function answerFeedback(button, type) {
+
+    const feedbackBox =
+        button.parentElement;
+
+    const buttons =
+        feedbackBox.querySelectorAll(
+            ".feedback-btn"
+        );
+
+    buttons.forEach(function (btn) {
+
+        btn.disabled = true;
+
+    });
+
+
+    feedbackBox.setAttribute(
+        "data-feedback",
+        type
+    );
+
+
+    if (type === "yes") {
+
+        feedbackBox.querySelector(
+            "span"
+        ).innerHTML =
+            "😊 Thanks! Glad it helped.";
+
+    } else {
+
+        feedbackBox.querySelector(
+            "span"
+        ).innerHTML =
+            "👍 Thanks for your feedback.";
+
+    }
+
+}
+
+function answerFeedback(button, type) {
+
+    const feedbackBox =
+        button.parentElement;
+
+    const buttons =
+        feedbackBox.querySelectorAll(
+            ".feedback-btn"
+        );
+
+    buttons.forEach(function (btn) {
+        btn.disabled = true;
+    });
+
+
+    const message =
+        feedbackBox.querySelector("span");
+
+
+    if (type === "yes") {
+
+        message.innerHTML =
+            "😊 Thanks! Glad it helped.";
+
+    } else {
+
+        message.innerHTML =
+            "👍 Thanks for your feedback.";
+
+    }
+
+}
+
+
+
+
+function usePrompt(promptText) {
+
+    const input =
+        document.getElementById("questionInput");
+
+    if (!input) {
+        return;
+    }
+
+    input.value = promptText;
+
+    input.focus();
+
+    input.style.height = "auto";
+
+    input.style.height =
+        input.scrollHeight + "px";
+}
+function editQuestion(button) {
+
+    const message =
+        button.closest(".message");
+
+    if (!message) {
+        return;
+    }
+
+    const question =
+        message.querySelector(".message-content");
+
+    if (!question) {
+        return;
+    }
+
+    const input =
+        document.getElementById("questionInput");
+
+    if (!input) {
+        return;
+    }
+
+    input.value =
+        question.innerText.trim();
+
+    input.focus();
+
+    input.style.height = "auto";
+
+    input.style.height =
+        input.scrollHeight + "px";
+
+    input.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
+
+
+function addChatTimestamps() {
+
+    const messages =
+        document.querySelectorAll(".message");
+
+    messages.forEach(function(message) {
+
+        if (message.querySelector(".chat-timestamp")) {
+            return;
+        }
+
+        const timestamp =
+            document.createElement("div");
+
+        timestamp.className =
+            "chat-timestamp";
+
+        const now = new Date();
+
+        timestamp.innerText =
+            now.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+
+        message.appendChild(timestamp);
+
+    });
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        addChatTimestamps();
+
+    }
+);
+
+
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", function () {
+
+        navigator.serviceWorker.register(
+            "/static/service-worker.js"
+        )
+        .then(function () {
+
+            console.log(
+                "AskAI Service Worker registered"
+            );
+
+        })
+        .catch(function (error) {
+
+            console.log(
+                "Service Worker error:",
+                error
+            );
+
+        });
+
+    });
+
+}
+
+</script>
+
+</script>
+
+
+</body>
+
+
+</html>
+
