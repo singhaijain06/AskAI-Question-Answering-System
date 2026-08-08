@@ -1,0 +1,10 @@
+{
+    "name": "AskAI - AI Assistant",
+    "short_name": "AskAI",
+    "description": "AI-powered Question Answering Assistant",
+    "start_url": "/chat",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#6366f1",
+    "orientation": "portrait"
+}
