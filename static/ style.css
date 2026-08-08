@@ -4964,12 +4964,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     .quick-prompts button {
 
-        font-size: 11px;
+font-size: 11px;
 
-        padding: 7px 10px;
-
-    }
+padding: 7px 10px;
 
 }
->>>>>>> be7437c (Updated AskAI features):static/style.css
-        /* AskAI live update */
+
+/* AskAI live update */
