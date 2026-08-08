@@ -1,7 +1,0 @@
-Flask
-groq
-Werkzeug
-markdown
-reportlab
-PyPDF2
-gunicorn
