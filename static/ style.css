@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    padding: 0;
+    padding: 0; 
     box-sizing: border-box;
 }
 body {
@@ -4972,3 +4972,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 }
 >>>>>>> be7437c (Updated AskAI features):static/style.css
+        /* AskAI live update */
