@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AskAI - Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .profile-page {
+            max-width: 700px;
+            margin: 35px auto;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 38px;
+            font-weight: 800;
+
+            box-shadow:
+                0 10px 25px
+                rgba(99,102,241,0.25);
+        }
+
+        .profile-header h1 {
+            margin: 0;
+            color: #111827;
+            font-size: 25px;
+        }
+
+        .profile-header p {
+            margin-top: 7px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .profile-info {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .info-label {
+            display: block;
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: #111827;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .profile-action {
+            flex: 1;
+            text-align: center;
+            padding: 13px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .change-password {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .dashboard-link {
+            background: #6366f1;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+
+            .profile-page {
+                margin: 20px auto;
+            }
+
+            .profile-card {
+                padding: 22px;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🤖
+            </div>
+
+            <div>
+
+                <h1>AskAI</h1>
+
+                <span>
+                    AI Assistant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a href="/chat" class="new-chat">
+            ＋ New Chat
+        </a>
+
+
+        <nav class="navigation">
+
+            <a href="/dashboard" class="nav-item">
+                📊 Dashboard
+            </a>
+
+            <a href="/chat" class="nav-item">
+                💬 Chat
+            </a>
+
+            <a href="/history" class="nav-item">
+                📜 History
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="user-profile">
+
+                <div class="avatar">
+                    {{ username[0]|upper }}
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        {{ username }}
+                    </strong>
+
+                    <small>
+                        Active User
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <a href="/logout" class="logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+
+        <header class="top-header">
+
+            <div>
+
+                <h2>
+                    My Profile
+                </h2>
+
+                <p>
+                    Manage your AskAI account.
+                </p>
+
+            </div>
+
+
+            <div class="online-status">
+
+                <span class="online-dot"></span>
+
+                Online
+
+            </div>
+
+        </header>
+
+
+
+        <section class="profile-page">
+
+
+            <div class="profile-card">
+
+
+                <div class="profile-header">
+
+                    <div class="profile-avatar">
+
+                        {{ username[0]|upper }}
+
+                    </div>
+
+
+                    <h1>
+                        {{ username }}
+                    </h1>
+
+
+                    <p>
+                        AskAI User
+                    </p>
+
+                </div>
+
+
+
+                <div class="profile-info">
+
+
+                    <div class="info-box">
+
+                        <span class="info-label">
+                            Username
+                        </span>
+
+                        <span class="info-value">
+                            {{ username }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="info-label">
+                            Account Status
+                        </span>
+
+                        <span class="info-value">
+                            🟢 Active
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="info-label">
+                            Account Type
+                        </span>
+
+                        <span class="info-value">
+                            AskAI User
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="profile-actions">
+
+                    <a
+                        href="/change-password"
+                        class="profile-action change-password"
+                    >
+                        🔐 Change Password
+                    </a>
+
+
+                    <a
+                        href="/dashboard"
+                        class="profile-action dashboard-link"
+                    >
+                        📊 Dashboard
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
